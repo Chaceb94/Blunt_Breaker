@@ -21,6 +21,7 @@ var app = {
     // Application Constructor
     initialize: function() {
         createCourt();
+        interval = setInterval(function () {move();}, speed);
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -45,7 +46,6 @@ var app = {
         var receivedElement = parentElement.querySelector('.court');        
 
         receivedElement.setAttribute("style", "display: block");
-        interval = setInterval(function () {move();}, speed);
         console.log('Received Event: ' + id);
     }
 };
