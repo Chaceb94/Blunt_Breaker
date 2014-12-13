@@ -74,11 +74,11 @@ function move(){
     y = y + yMove;
     if(x >= court.width - ballSize || x <= 0){
         xMove = -xMove;
-        navigator.vibrate();
+        navigator.vibrate;
     }
     if(y >= court.height - ballSize || y <= 0){
         yMove = -yMove;
-        console.log(navigator.vibrate(200));
+        navigator.vibrate;
     }
     ctx.clearRect(0,0,court.width,court.height);
     ctx.fillRect(x,y,ballSize,ballSize);

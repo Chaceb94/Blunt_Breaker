@@ -74,7 +74,7 @@ function move(){
     y = y + yMove;
     if(x >= court.width - ballSize || x <= 0){
         xMove = -xMove;
-        console.log(navigator.vibrate(200));
+        navigator.vibrate();
     }
     if(y >= court.height - ballSize || y <= 0){
         yMove = -yMove;
