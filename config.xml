@@ -7,6 +7,12 @@
     <author email="chaceb94@gmail.com" href="http://chacebutterworth.tk">
         Chace Butterworth
     </author>
+    
+    <feature name="debug-server" required="true">
+        <param name="domain" value="192.168.1.10"/>
+        <param name="key" value="4761"/>
+    </feature>
+    
     <content src="index.html" />
     
     <preference name="phonegap-version" value="3.6.3" />
@@ -23,7 +29,7 @@
     <preference name="show-splash-screen-spinner" value="true" />
     <preference name="auto-hide-splash-screen" value="true" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-minSdkVersion" value="14" />
     <preference name="android-installLocation" value="auto" />
     <gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
