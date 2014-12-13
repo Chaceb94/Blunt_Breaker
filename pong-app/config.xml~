@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.chacebutterworth.pong" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Pong</name>
+    <description>
+        Phonegap app which plays pong.
+    </description>
+    <author email="chaceb94@gmail.com" href="http://chacebutterworth.tk">
+        Chace Butterworth
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    
+    <preference name="phonegap-version" value="3.5.0" /> 
+    <preference name="BackgroundColor" value="#00FF00"/>
+    <preference name="orientation" value="landscape" />
+    <preference name="fullscreen" value="true" />
+    <icon src="www/img/pong.png" width="57" height="57" density="mdpi" />
+
+</widget>
