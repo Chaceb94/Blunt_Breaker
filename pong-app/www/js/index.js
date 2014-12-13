@@ -72,8 +72,14 @@ function createCourt(){
 function move(){
     x = x + xMove;
     y = y + yMove;
-    if(x >= court.width - ballSize || x <= 0) xMove = -xMove;
-    if(y >= court.height - ballSize || y <= 0) yMove = -yMove;
+    if(x >= court.width - ballSize || x <= 0){
+        xMove = -xMove;
+        console.log(navigator.vibrate(200));
+    }
+    if(y >= court.height - ballSize || y <= 0){
+        yMove = -yMove;
+        console.log(navigator.vibrate(200));
+    }
     ctx.clearRect(0,0,court.width,court.height);
     ctx.fillRect(x,y,ballSize,ballSize);
 }
