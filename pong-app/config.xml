@@ -8,11 +8,8 @@
         Chace Butterworth
     </author>
     <content src="index.html" />
-    <access origin="*" />
     
-    <icon src="www/img/pong.png" width="57" height="57" density="mdpi" />
-    
-    <preference name="phonegap-version" value="3.6.3" /> 
+    <preference name="phonegap-version" value="3.6.3" />
     <preference name="orientation" value="landscape" />
     <preference name="permissions" value="none" />
     <preference name="target-device" value="universal" />
