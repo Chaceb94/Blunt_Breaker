@@ -16,6 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+var x = 100;
+var y = 100;
+var speed = 10;
+var xMove = 1;
+var yMove = 1;
+var ballSize = 20;
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -26,24 +34,40 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('click', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        app.receivedEvent('deviceReady');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
+        var receivedElement = parentElement.querySelector('.cnvs');        
+        
+        
+        
+        receivedElement.setAttribute("style", "display: block");
+        interval = setInterval(function () {app.move();}, speed);
+        //app.move();
         console.log('Received Event: ' + id);
+    },
+    
+    move: function(){
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        x = x + xMove;
+        y = y + yMove;
+        if(x >= canvas.width - ballSize || x <= 0) xMove = -xMove;
+        if(y >= canvas.height - ballSize || y <= 0) yMove = -yMove;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle="#00FF00";
+        ctx.fillRect(x,y,ballSize,ballSize);
     }
+
 };
+
+app.initialize();
