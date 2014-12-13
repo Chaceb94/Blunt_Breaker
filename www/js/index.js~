@@ -29,7 +29,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.addEventListener('click', this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, true);
     },
     // deviceready Event Handler
     //
@@ -40,7 +40,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        document.removeEventListener('click', this.onDeviceReady, false);
+        document.removeEventListener('deviceready', this.onDeviceReady, false);
         
         var parentElement = document.getElementById(id);
         var receivedElement = parentElement.querySelector('.court');        
@@ -74,11 +74,11 @@ function move(){
     y = y + yMove;
     if(x >= court.width - ballSize || x <= 0){
         xMove = -xMove;
-        navigator.vibrate();
+        console.log(navigator.vibrate);
     }
     if(y >= court.height - ballSize || y <= 0){
         yMove = -yMove;
-        console.log(navigator.vibrate(200));
+        console.log(navigator.vibrate);
     }
     ctx.clearRect(0,0,court.width,court.height);
     ctx.fillRect(x,y,ballSize,ballSize);
