@@ -17,16 +17,10 @@
  * under the License.
  */
 
-var x = 100;
-var y = 100;
-var speed = 10;
-var xMove = 1;
-var yMove = 1;
-var ballSize = 20;
-
 var app = {
     // Application Constructor
     initialize: function() {
+        createCourt();
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -45,29 +39,43 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
+        document.removeEventListener('click', this.onDeviceReady, false);
+        
         var parentElement = document.getElementById(id);
-        var receivedElement = parentElement.querySelector('.cnvs');        
-        
-        
-        
-        receivedElement.setAttribute("style", "display: block");
-        interval = setInterval(function () {app.move();}, speed);
-        //app.move();
-        console.log('Received Event: ' + id);
-    },
-    
-    move: function(){
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        x = x + xMove;
-        y = y + yMove;
-        if(x >= canvas.width - ballSize || x <= 0) xMove = -xMove;
-        if(y >= canvas.height - ballSize || y <= 0) yMove = -yMove;
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle="#00FF00";
-        ctx.fillRect(x,y,ballSize,ballSize);
-    }
+        var receivedElement = parentElement.querySelector('.court');        
 
+        receivedElement.setAttribute("style", "display: block");
+        interval = setInterval(function () {move();}, speed);
+        console.log('Received Event: ' + id);
+    }
 };
+
+function createCourt(){
+    speed = 10;
+    xMove = 2;
+    yMove = 2;
+    ballSize = 20;
+    paddleWidth = 10;
+    paddleHeight = 50;
+    court = document.getElementById("pongCourt");
+    ctx = court.getContext("2d");
+    court.width  = window.innerWidth;
+    court.height = window.innerHeight;
+    ctx.fillStyle="#00FF00";
+    x = court.width/2;
+    y = court.height/2;
+    ctx.fillRect(x,y,ballSize,ballSize);
+    ctx.fillRect(court.width/100,court.height/2,paddleWidth,paddleHeight);
+    ctx.fillRect(((court.width/100)*99)-paddleWidth,court.height/2,paddleWidth,paddleHeight);
+}
+
+function move(){
+    x = x + xMove;
+    y = y + yMove;
+    if(x >= court.width - ballSize || x <= 0) xMove = -xMove;
+    if(y >= court.height - ballSize || y <= 0) yMove = -yMove;
+    ctx.clearRect(0,0,court.width,court.height);
+    ctx.fillRect(x,y,ballSize,ballSize);
+}
 
 app.initialize();
