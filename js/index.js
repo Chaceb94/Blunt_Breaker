@@ -23,7 +23,7 @@ var ctx = canvas.getContext("2d");
 color = "#00FF00";
 
 createCourt();
-
+     
 var app = {
     // Application Constructor
     initialize: function() {        
@@ -36,8 +36,10 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('click', this.onClick, false);
- 
+      
+      
     },
+
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
@@ -53,8 +55,8 @@ var app = {
         console.log('Received Event: ' + id);
     },
     onClick: function() {
-        //document.addEventListener('deviceready', this.onDeviceReady, false);
-        console.log('true');
+//        document.addEventListener('deviceready', this.onDeviceReady, false);
+//        console.log('true');
         if (color == "#FF0000"){
             color = "#00FF00";
         }
@@ -79,12 +81,12 @@ function createCourt() {
 function drawCourt() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the screen before drawing more
 
-    //ctx.fillStyle="#AA00FF"; //set color purple to initialize boundaries
+//    ctx.fillStyle="#AA00FF"; //set color purple to initialize boundaries
     ctx.fillRect(5, 5, 5, canvas.height); //draw left wall
     ctx.fillRect(canvas.width-10, 5, 5, canvas.height); //draw right wall
     ctx.fillRect(5, 5, canvas.width-10, 5); //draw ceiling
 
-    //ctx.fillStyle="#00FF00"; //set color green to initialize ball
+//    ctx.fillStyle="#00FF00"; //set color green to initialize ball
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //draw the paddle's initial position
 
@@ -111,12 +113,12 @@ var ball = {
         //check if ball is hitting left or right wall
         if(ball.x >= canvas.width - ball.size - 10 || ball.x <= 10){
             ball.xMove = -ball.xMove;
-            navigator.vibrate(50);
+//            navigator.vibrate(50);
         }
         //check if ball is hitting ceiling or floor
         if(ball.y >= canvas.height + ball.size || ball.y <= 10){
             ball.yMove = -ball.yMove;
-            navigator.vibrate(50);
+            //navigator.vibrate(50);
         }
         //check if ball is hitting paddle
         if(ball.y + ball.size == paddle.y &&
@@ -125,7 +127,7 @@ var ball = {
            ball.yMove > 0){
             console.log('yes');
             ball.yMove = -ball.yMove;
-            navigator.vibrate(50);
+//            navigator.vibrate(50);
         }
         
         drawCourt();
