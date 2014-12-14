@@ -17,11 +17,13 @@
  * under the License.
  */
 
+var canvas = document.getElementById("pongCourt");
+var ctx = canvas.getContext("2d");
+
 var app = {
     // Application Constructor
     initialize: function() {
         createCourt();
-        interval = setInterval(function () {move();}, speed);
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -40,47 +42,52 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        document.removeEventListener('deviceready', this.onDeviceReady, false);
-        ctx.fillStyle="#0000FF";
-        ctx.fillRect(100,100,ballSize,ballSize);
-        var parentElement = document.getElementById(id);
-        var receivedElement = parentElement.querySelector('.court');        
+        var speed = 10;
 
-        receivedElement.setAttribute("style", "display: block");
+        interval = setInterval(function () {ball.move();}, speed);
         console.log('Received Event: ' + id);
     }
 };
 
-function createCourt(){
-    speed = 10;
-    xMove = 2;
-    yMove = 2;
-    ballSize = 20;
-    paddleWidth = 10;
-    paddleHeight = 50;
-    court = document.getElementById("pongCourt");
-    ctx = court.getContext("2d");
-    court.width  = window.innerWidth;
-    court.height = window.innerHeight;
-    ctx.fillStyle="#00FF00";
-    x = court.width/2;
-    y = court.height/2;
-    ctx.fillRect(x,y,ballSize,ballSize);
-    ctx.fillRect(court.width/100,court.height/2,paddleWidth,paddleHeight);
-    ctx.fillRect(((court.width/100)*99)-paddleWidth,court.height/2,paddleWidth,paddleHeight);
+
+
+function createCourt() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
-function move(){
-    x = x + xMove;
-    y = y + yMove;
-    if(x >= court.width - ballSize || x <= 0){
-        xMove = -xMove;
-        console.log(navigator.vibrate(50));
-    }
-    if(y >= court.height - ballSize || y <= 0){
-        yMove = -yMove;
-        console.log(navigator.vibrate(50));
-    }
-    ctx.clearRect(0,0,court.width,court.height);
-    ctx.fillRect(x,y,ballSize,ballSize);
+function drawCourt() {
+    ctx.fillStyle="#00FF00";
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    ctx.fillRect(ball.x, ball.y, ball.size, ball.size);
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 }
+
+var paddle = {
+    width:50,
+    height:10,
+    x:(canvas.width/2),
+    y:(canvas.height/2)
+};
+
+var ball = {
+    xMove:2,
+    yMove:2,
+    size:20,
+    x:canvas.width/2,
+    y:canvas.height/2,
+
+    move: function() {
+        this.x = this.x + this.xMove;
+        this.y = this.y + this.yMove;
+        if(ball.x >= canvas.width - this.size || ball.x <= 0){
+            this.xMove = -this.xMove;
+            navigator.vibrate(50);
+        }
+        if(ball.y >= canvas.height - this.size || ball.y <= 0){
+            this.yMove = -this.yMove;
+            navigator.vibrate(50);
+        }
+        drawCourt();
+    }
+};
