@@ -17,11 +17,11 @@
  * under the License.
  */
 
+var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
 var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
 
 color = "#00FF00";
-
 createCourt();
      
 var app = {
@@ -36,6 +36,10 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
 //        document.addEventListener('click', this.onClick, false);
+        $("canvas").on("tap",function(){
+            this.onClick();
+            console.log('touch');
+        });
       
       
     },
@@ -56,7 +60,7 @@ var app = {
     },
     onClick: function() {
 //        document.addEventListener('deviceready', this.onDeviceReady, false);
-//        console.log('true');
+        console.log('tap');
         if (color == "#FF0000"){
             color = "#00FF00";
         }
@@ -84,7 +88,14 @@ function drawCourt() {
 //    ctx.fillStyle="#AA00FF"; //set color purple to initialize boundaries
     ctx.fillRect(5, 5, 5, canvas.height); //draw left wall
     ctx.fillRect(canvas.width-10, 5, 5, canvas.height); //draw right wall
-    ctx.fillRect(5, 5, canvas.width-10, 5); //draw ceiling
+    
+    //check if ios before drawing ceiling to adjust for statusbar
+    if(iOS) {
+        ctx.fillRect(0, 0, canvas.width, 20); //draw ceiling to match statusbar        
+    }
+    else {
+        ctx.fillRect(5, 5, canvas.width-10, 5); //draw ceiling for no statusbar
+    }
 
 //    ctx.fillStyle="#00FF00"; //set color green to initialize ball
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
@@ -133,16 +144,3 @@ var ball = {
         drawCourt();
     }
 };
-
-function onLoad() {
-    document.getElementById('touchstart').addEventListener('touchstart', hello, false);
-    document.getElementById('touchend').addEventListener('touchend', bye, false);
-}
-
-function hello() {
-    console.log('hello');
-}
-
-function bye() {
-    console.log('bye');
-}
