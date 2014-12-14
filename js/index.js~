@@ -20,10 +20,13 @@
 var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
 
+color = "#00FF00";
+
+createCourt();
+
 var app = {
     // Application Constructor
-    initialize: function() {
-        createCourt();
+    initialize: function() {        
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -32,6 +35,8 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('click', this.onClick, false);
+ 
     },
     // deviceready Event Handler
     //
@@ -42,52 +47,87 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var speed = 10;
+        var speed = 1;
 
         interval = setInterval(function () {ball.move();}, speed);
         console.log('Received Event: ' + id);
+    },
+    onClick: function() {
+        //document.addEventListener('deviceready', this.onDeviceReady, false);
+        console.log('true');
+        if (color == "#FF0000"){
+            color = "#00FF00";
+        }
+        if (color == "#00FF00"){
+            color = "#FF0000";
+        }
+        ctx.fillStyle = color;
+            
+        
     }
 };
 
 
 
 function createCourt() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width  = window.innerWidth; //set canvas width to device's screen width
+    canvas.height = window.innerHeight; //set canvas height to device's screen height
+    ctx.fillStyle= color; //set color green to initialize ball
+    
 }
 
 function drawCourt() {
-    ctx.fillStyle="#00FF00";
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-    ctx.fillRect(ball.x, ball.y, ball.size, ball.size);
-    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the screen before drawing more
+
+    //ctx.fillStyle="#AA00FF"; //set color purple to initialize boundaries
+    ctx.fillRect(5, 5, 5, canvas.height); //draw left wall
+    ctx.fillRect(canvas.width-10, 5, 5, canvas.height); //draw right wall
+    ctx.fillRect(5, 5, canvas.width-10, 5); //draw ceiling
+
+    //ctx.fillStyle="#00FF00"; //set color green to initialize ball
+    ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //draw the paddle's initial position
+
 }
 
 var paddle = {
     width:50,
     height:10,
     x:(canvas.width/2),
-    y:(canvas.height/2)
+    y:canvas.height - (canvas.height/10)
 };
 
 var ball = {
-    xMove:2,
-    yMove:2,
+    xMove:1,
+    yMove:1,
     size:20,
     x:canvas.width/2,
     y:canvas.height/2,
 
     move: function() {
-        this.x = this.x + this.xMove;
-        this.y = this.y + this.yMove;
-        if(ball.x >= canvas.width - this.size || ball.x <= 0){
-            this.xMove = -this.xMove;
+        ball.x = ball.x + ball.xMove;
+        ball.y = ball.y + ball.yMove;
+        
+        //check if ball is hitting left or right wall
+        if(ball.x >= canvas.width - ball.size - 10 || ball.x <= 10){
+            ball.xMove = -ball.xMove;
             navigator.vibrate(50);
         }
-        if(ball.y >= canvas.height - this.size || ball.y <= 0){
-            this.yMove = -this.yMove;
+        //check if ball is hitting ceiling or floor
+        if(ball.y >= canvas.height + ball.size || ball.y <= 10){
+            ball.yMove = -ball.yMove;
             navigator.vibrate(50);
         }
+        //check if ball is hitting paddle
+        if(ball.y + ball.size == paddle.y &&
+           ball.x <= paddle.x + paddle.width &&
+           ball.x + ball.size >= paddle.x &&
+           ball.yMove > 0){
+            console.log('yes');
+            ball.yMove = -ball.yMove;
+            navigator.vibrate(50);
+        }
+        
         drawCourt();
     }
 };
