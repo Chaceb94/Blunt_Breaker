@@ -20,58 +20,103 @@
 var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
 var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
+var score = 0;
+
+//check if ios before drawing ceiling to adjust for statusbar
+if(iOS) {
+    var wall = {
+            
+        leftX:0,
+        leftY:0,
+                   
+        rightX:canvas.width,
+        rightY:0,
+                        
+        topX:0,
+        topY:0,
+        topWidth:canvas.width,
+            
+        width:2,
+        height:20
+                        
+    };     
+}
+else {
+    var wall = {
+        
+        leftX:5,
+        leftY:5,
+        
+            
+        rightX:canvas.width,
+        rightY:5,
+           
+        topX:5,
+        topY:5,
+        topWidth:canvas.width,
+            
+        width:5,
+        height:5   
+    
+    };
+}
+    
 
 color = "#00FF00";
 createCourt();
      
-var app = {
-    // Application Constructor
-    initialize: function() {        
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-//        document.addEventListener('click', this.onClick, false);
-        $("canvas").on("tap",function(){
-            app.onClick();
-            console.log('touch');
-        });
-      
-      
-    },
+// Application Constructor
+function initialize() {        
+    this.bindEvents();
+}
+// Bind Event Listeners
+//
+// Bind any events that are required on startup. Common events are:
+// 'load', 'deviceready', 'offline', and 'online'.
+function bindEvents() {
+    document.addEventListener('deviceready', function() {
+        receivedEvent('ready');
+        $("canvas").on("touchstart",function(){
+            $("canvas").on("touchmove",function(ev){
+                //onClick();
+                var e = ev.originalEvent;
+                var x = e.touches[0].screenX;
+                var y = e.touches[0].screenY;
+                if(x < paddle.x + paddle.width * 2 &&
+                   x > paddle.x - paddle.width &&
+                   y < canvas.height &&
+                   y > paddle.y &&
+                   x + paddle.width/2 < canvas.width - 10 &&
+                   x - paddle.width/2 > 10 ) {
+                    paddle.x = x - paddle.width/2;
+                    
+                    
+            
+                }
+            });
+        });     
+    });
+}
 
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('ready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var speed = 1;
+// deviceready Event Handler
+//
+// The scope of 'this' is the event. In order to call the 'receivedEvent'
+// function, we must explicitly call 'app.receivedEvent(...);'
 
-        interval = setInterval(function () {ball.move();}, speed);
-        console.log('Received Event: ' + id);
-    },
-    onClick: function() {
+// Update DOM on a Received Event
+function receivedEvent(id) {
+    var speed = 1;
+
+    interval = setInterval(function () {ball.move();}, speed);
+    console.log('Received Event: ' + id);
+}
+
+function onClick() {
 //        document.addEventListener('deviceready', this.onDeviceReady, false);
         console.log('tap');
-        if (color == "#FF0000"){
-            color = "#00FF00";
-        }
-        else if (color == "#00FF00"){
-            color = "#FF0000";
-        }
-        ctx.fillStyle = color;
-            
-        
-    }
-};
+
+}
+
 
 
 
@@ -85,19 +130,12 @@ function createCourt() {
 function drawCourt() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clear the screen before drawing more
 
-//    ctx.fillStyle="#AA00FF"; //set color purple to initialize boundaries
-    ctx.fillRect(5, 5, 5, canvas.height); //draw left wall
-    ctx.fillRect(canvas.width-10, 5, 5, canvas.height); //draw right wall
-    
-    //check if ios before drawing ceiling to adjust for statusbar
-    if(iOS) {
-        ctx.fillRect(0, 0, canvas.width, 20); //draw ceiling to match statusbar        
-    }
-    else {
-        ctx.fillRect(5, 5, canvas.width-10, 5); //draw ceiling for no statusbar
-    }
+    ctx.fillStyle="#AA00FF"; //set color purple to initialize walls
+    ctx.fillRect(wall.leftX, wall.leftY, wall.width, canvas.height); //draw left wall
+    ctx.fillRect(wall.rightX, wall.rightY, wall.width, canvas.height); //draw right wall
+    ctx.fillRect(wall.topX, wall.topY, wall.topWidth, wall.height); //draw ceiling to match statusbar   
 
-//    ctx.fillStyle="#00FF00"; //set color green to initialize ball
+    ctx.fillStyle="#00FF00"; //set color green to initialize ball and paddle
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //draw the paddle's initial position
 
@@ -122,24 +160,33 @@ var ball = {
         ball.y = ball.y + ball.yMove;
         
         //check if ball is hitting left or right wall
-        if(ball.x >= canvas.width - ball.size - 10 || ball.x <= 10){
+        if(ball.x + ball.size >= wall.rightX || ball.x <= wall.leftX + wall.width){
             ball.xMove = -ball.xMove;
 //            navigator.vibrate(50);
         }
         //check if ball is hitting ceiling or floor
-        if(ball.y >= canvas.height + ball.size || ball.y <= 10){
+        if(ball.y <= wall.topY + wall.height){
             ball.yMove = -ball.yMove;
             //navigator.vibrate(50);
         }
+        
+        if(ball.y >= canvas.height + ball.size) {
+            ball.yMove = -ball.yMove;
+            navigator.vibrate(50);
+            score++;
+            console.log(score);
+        } 
+        
         //check if ball is hitting paddle
-        if(ball.y + ball.size == paddle.y &&
+        if(ball.y + ball.size >= paddle.y &&
+           ball.y <= paddle.y + 5 &&
            ball.x <= paddle.x + paddle.width &&
            ball.x + ball.size >= paddle.x &&
            ball.yMove > 0){
-            console.log('yes');
             ball.yMove = -ball.yMove;
 //            navigator.vibrate(50);
         }
+        
         
         drawCourt();
     }
