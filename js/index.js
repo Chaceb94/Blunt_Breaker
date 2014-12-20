@@ -33,7 +33,7 @@ var wall = {
     high: 2,  
     leftX: 5,
     leftY: 5, 
-    rightX: canvas.width - 7,
+    rightX: canvas.width - (this.wide + 5),
     rightY: 5,        
     topX: 5,
     topY: 5,
@@ -88,16 +88,16 @@ var ball = {
         drawCourt();
     }
 };
-
+iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 20;
-    wall.leftX = wall.margin;
-    wall.leftY = wall.margin;
-    wall.rightX = canvas.width;
-    wall.rightY = wall.margin;
-    wall.topX = wall.margin;
-    wall.topY = wall.margin;
+    wall.leftX = 0;
+    wall.leftY = 0;
+    wall.rightX = canvas.width - 2;
+    wall.rightY = 0;
+    wall.topX = 0;
+    wall.topY = 0;
     wall.topWide = canvas.width;
 
     paddle.wide = 70;
@@ -128,8 +128,8 @@ function initialize() {
                    x > paddle.x - paddle.wide &&
                    y < canvas.height &&
                    y > paddle.y &&
-                   x + paddle.wide/2 < canvas.width - 10 &&
-                   x - paddle.wide/2 > 10 ) {
+                   x + paddle.wide/2 < wall.rightX &&
+                   x - paddle.wide/2 > wall.leftX + wall.wide ) {
                     paddle.x = x - paddle.wide/2;
                 }
             });
