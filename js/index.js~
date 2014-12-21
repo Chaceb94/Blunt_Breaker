@@ -104,7 +104,8 @@ var ball = {
         drawCourt();
     }
 };
-//iOS = true;
+
+iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 50;
@@ -127,7 +128,7 @@ if(iOS) {
 function initialize() {
     document.addEventListener('deviceready', function() {
         drawCourt();
-        ctx.fillStyle('white');
+        ctx.fillStyle = 'white';
         ctx.fillText('Touch to Begin', 100, 400);
         $("canvas").on("touchdown mousedown", function(){
             $("canvas").off("touchdown mousedown");
@@ -188,9 +189,9 @@ function drawCourt() {
     var i = 0;    
     var y = wall.topY + wall.high + brickSize;
 
-    while(y < brickSize * 4) {
+    while(y < (brickSize * 4) + wall.topY + wall.high) {
         var x = wall.leftX + wall.wide;    
-
+        console.log(i);
         while(x < wall.rightX - brickSize) {            
             ctx.drawImage(bricks[i], x + offset, y, brickSize, brickSize);
             x = x + brickSize;

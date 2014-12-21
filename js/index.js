@@ -104,6 +104,7 @@ var ball = {
         drawCourt();
     }
 };
+
 //iOS = true;
 if(iOS) {        
     wall.wide = 2;
@@ -188,9 +189,8 @@ function drawCourt() {
     var i = 0;    
     var y = wall.topY + wall.high + brickSize;
 
-    while(y < brickSize * 4) {
+    while(y < (brickSize * 4) + wall.topY + wall.high) {
         var x = wall.leftX + wall.wide;    
-
         while(x < wall.rightX - brickSize) {            
             ctx.drawImage(bricks[i], x + offset, y, brickSize, brickSize);
             x = x + brickSize;
