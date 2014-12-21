@@ -22,7 +22,7 @@ var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
 var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
 var score = 0;
-var speed = 10;
+var speed = 30;
 var pixelRatio = window.devicePixelRatio;
 
 canvas.width  = window.innerWidth * pixelRatio; //set canvas width to device's screen width
@@ -38,17 +38,17 @@ rasta_gradient.addColorStop(1,"red");
 ctx.fillStyle = rasta_gradient;
 
 bricks = [];
-brick = new Image();
-brick.src = "img/pot_leaf_green-128.png";
-bricks.push(brick);
 
-brick = new Image();
-brick.src = "img/pot_leaf_yellow-128.png";
-bricks.push(brick);
+greenBrick = new Image();
+greenBrick.src = "img/pot_leaf_green-128.png";
 
-brick = new Image();
-brick.src = "img/pot_leaf_red-128.png";
-bricks.push(brick);
+yellowBrick = new Image();
+yellowBrick.src = "img/pot_leaf_yellow-128.png";
+
+redBrick = new Image();
+redBrick.src = "img/pot_leaf_red-128.png";
+
+var brick = {green:greenBrick, yellow:yellowBrick, red:redBrick}; 
 
 joint = new Image();
 joint.src = "img/joint.png";
@@ -74,13 +74,16 @@ paddle = {
 };
 
 var ball = {
-    xMove: 1,
-    yMove: 1,
+    xMove: 6,
+    yMove: 6,
     size: 25,
     x: canvas.width/2,
     y: canvas.height/2,
     
     move: function () {
+        ctx.clearRect(ball.x, ball.y, ball.size, ball.size);
+        ctx.clearRect(paddle.x, paddle.y, paddle.wide, paddle.high);
+        
         ball.x = ball.x + ball.xMove;
         ball.y = ball.y + ball.yMove;
         
@@ -129,8 +132,8 @@ if(iOS) {
     wall.topY = 0;
     wall.topWide = canvas.width;
 
-    ball.xMove = 2;
-    ball.yMove = 2;
+    //ball.xMove = 2;
+    //ball.yMove = 2;
     ball.size = 25;
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;  
@@ -140,32 +143,33 @@ if(iOS) {
 function initialize() {
     document.addEventListener('deviceready', function() {
         drawCourt();
+        drawBrix();
         //ctx.fillStyle = 'white';
         ctx.fillText('Touch to Begin', (canvas.width/2) , 400);
         $("canvas").on("touchstart", function(){
             $("canvas").off("touchstart");
             interval = setInterval(function () {ball.move()}, speed);
-        });
+        
 
-        $("canvas").on("touchmove", function(ev){
-            var e = ev.originalEvent;
-            var x = e.touches[0].screenX;
-            var y = e.touches[0].screenY;
-            if(x < paddle.x + paddle.wide * 2 &&
-               x > paddle.x - paddle.wide &&
-               y < canvas.height &&
-               y > paddle.y &&
-               x + paddle.wide/2 < wall.rightX &&
-               x - paddle.wide/2 > wall.leftX + wall.wide ) {
-                 paddle.x = x - paddle.wide/2;
-            }
-        });
+            $("canvas").on("touchmove", function(ev){
+                var e = ev.originalEvent;
+                var x = e.touches[0].screenX;
+                var y = e.touches[0].screenY;
+                if(x < paddle.x + paddle.wide * 2 &&
+                   x > paddle.x - paddle.wide &&
+                   y < canvas.height &&
+                   y > paddle.y &&
+                   x + paddle.wide/2 < wall.rightX &&
+                   x - paddle.wide/2 > wall.leftX + wall.wide ) {
+                     console.log('true');
+                     paddle.x = x - paddle.wide/2;
+                }
+            });
+        });    
     });
 }
 
 function drawCourt() {
-    //clear the screen before drawing more
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     //draw walls
     //ctx.fillStyle = "#AA00FF"; //set color purple to initialize walls
@@ -186,27 +190,24 @@ function drawCourt() {
     ctx.font = "20px Courier New";
     ctx.fillText('Deaths:' + score, wall.leftX + wall.wide + 5, wall.topY + wall.high - 5 );
 
-    //draw brix
-    
-        
+}
 
-    var brickSize = 70;
+function drawBrix() {
+    //draw brix
+    var brickSize = 75;
     var inset = ((canvas.width - (canvas.width - wall.rightX)) - (wall.leftX + wall.wide));
     var bricksNum = parseInt(inset/brickSize);
     var bricksWidth = brickSize * bricksNum;
-    var offset = (inset - bricksWidth) / 2 
-    var i = 0;    
+    var offset = (inset - bricksWidth) / 2     
     var y = wall.topY + wall.high + brickSize;
-
-    while(y < (brickSize * 4) + wall.topY + wall.high) {
-        var x = wall.leftX + wall.wide;    
-        while(x < wall.rightX - brickSize) {            
-            ctx.drawImage(bricks[i], x + offset, y, brickSize, brickSize);
-            x = x + brickSize;
-        }
-    y = y + brickSize;
-    i++;
+    var b = 0;
+    for ( b in brick) { 
+        var x = wall.leftX + wall.wide;
+        while(x < wall.rightX - brickSize) {
+            ctx.drawImage(brick[b], x + offset, y, brickSize, brickSize);
+            x = x + brickSize;        
+        }   
+        y = y + brickSize;
     }
 }
-
-
+    
