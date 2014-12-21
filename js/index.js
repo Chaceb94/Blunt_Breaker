@@ -30,10 +30,10 @@ canvas.height = window.innerHeight; //set canvas height to device's screen heigh
 
 var wall = {
     wide: 2,
-    high: 2,  
+    high: 30,  
     leftX: 5,
     leftY: 5, 
-    rightX: canvas.width - (this.wide + 5),
+    rightX: canvas.width - 7,
     rightY: 5,        
     topX: 5,
     topY: 5,
@@ -88,10 +88,10 @@ var ball = {
         drawCourt();
     }
 };
-iOS = true;
+//iOS = true;
 if(iOS) {        
     wall.wide = 2;
-    wall.high = 20;
+    wall.high = 50;
     wall.leftX = 0;
     wall.leftY = 0;
     wall.rightX = canvas.width - 2;
@@ -143,18 +143,24 @@ function drawCourt() {
     //clear the screen before drawing more
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //draw walls
-    ctx.fillStyle="#AA00FF"; //set color purple to initialize walls
+    ctx.fillStyle = "#AA00FF"; //set color purple to initialize walls
     ctx.fillRect(wall.leftX, wall.leftY, wall.wide, canvas.height); //draw left wall
     ctx.fillRect(wall.rightX, wall.rightY, wall.wide, canvas.height); //draw right wall
+
+    var my_gradient=ctx.createLinearGradient(0,0,0,wall.high);
+    my_gradient.addColorStop(0,"black");
+    my_gradient.addColorStop(1,"#AA00FF");
+    ctx.fillStyle = my_gradient;
     ctx.fillRect(wall.topX, wall.topY, wall.topWide, wall.high); //draw ceiling to match statusbar   
     //draw ball
-    ctx.fillStyle="#00FF00"; //set color green to initialize ball and paddle
+    ctx.fillStyle = "#00FF00"; //set color green to initialize ball and paddle
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
     ctx.fillRect(paddle.x, paddle.y, paddle.wide, paddle.high); //draw the paddle's initial position
 
     //draw textbox to show score
-    ctx.font="20px Courier New";
-    ctx.fillText('Deaths: ' + score, 100, 100);
+    ctx.fillStyle = "black";
+    ctx.font = "20px Courier New";
+    ctx.fillText('Deaths:' + score, wall.leftX + wall.wide + 5, wall.topY + wall.high - 5 );
 }
 
 
