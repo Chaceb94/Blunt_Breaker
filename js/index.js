@@ -23,10 +23,26 @@ var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
 var score = 0;
 var speed = 10;
-var interval = null;
 
 canvas.width  = window.innerWidth; //set canvas width to device's screen width
 canvas.height = window.innerHeight; //set canvas height to device's screen height
+
+bricks = [];
+brick = new Image();
+brick.src = "res/sprites/pot_leaf_red-128.png";
+bricks.push(brick);
+
+brick = new Image();
+brick.src = "res/sprites/pot_leaf_green-128.png";
+bricks.push(brick);
+
+brick = new Image();
+brick.src = "res/sprites/pot_leaf_yellow-128.png";
+bricks.push(brick);
+
+joint = new Image();
+joint.src = "res/sprites/joint.png";
+
 
 var wall = {
     wide: 2,
@@ -40,11 +56,11 @@ var wall = {
     topWide: canvas.width - 10
 };     
     
-var paddle = {
-    wide: 50,
-    high: 10,
+paddle = {    
+    wide: 70,
+    high: 16,
     x: canvas.width/2,
-    y: canvas.height * 9 / 10
+    y: canvas.height * 4 / 5
 };
 
 var ball = {
@@ -100,13 +116,8 @@ if(iOS) {
     wall.topY = 0;
     wall.topWide = canvas.width;
 
-    paddle.wide = 70;
-    paddle.high = 10;
-    paddle.x = canvas.width/2;
-    paddle.y = (canvas.height * 9 / 10);
-
-    ball.xMove = 1;
-    ball.yMove = 1;
+    ball.xMove = 2;
+    ball.yMove = 2;
     ball.size = 10;
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;  
@@ -116,10 +127,11 @@ if(iOS) {
 function initialize() {
     document.addEventListener('deviceready', function() {
         drawCourt();
+        ctx.fillStyle = 'white';
+        ctx.fillText('Touch to Begin', 100, 400);
         $("canvas").on("touchdown mousedown", function(){
             $("canvas").off("touchdown mousedown");
             interval = setInterval(function () {ball.move()}, speed);
-            console.log('touchdown!');
             $("canvas").on("touchmove", function(ev){
                 var e = ev.originalEvent;
                 var x = e.touches[0].screenX;
@@ -155,12 +167,37 @@ function drawCourt() {
     //draw ball
     ctx.fillStyle = "#00FF00"; //set color green to initialize ball and paddle
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
-    ctx.fillRect(paddle.x, paddle.y, paddle.wide, paddle.high); //draw the paddle's initial position
+
+
+    ctx.drawImage(joint, paddle.x, paddle.y, paddle.wide, paddle.high); //draw the paddle's initial position
 
     //draw textbox to show score
     ctx.fillStyle = "black";
     ctx.font = "20px Courier New";
     ctx.fillText('Deaths:' + score, wall.leftX + wall.wide + 5, wall.topY + wall.high - 5 );
+
+    //draw brix
+    
+        
+
+    var brickSize = 40;
+    var inset = ((canvas.width - (canvas.width - wall.rightX)) - (wall.leftX + wall.wide));
+    var bricksNum = parseInt(inset/brickSize);
+    var bricksWidth = brickSize * bricksNum;
+    var offset = (inset - bricksWidth) / 2 
+    var i = 0;    
+    var y = wall.topY + wall.high + brickSize;
+
+    while(y < brickSize * 4) {
+        var x = wall.leftX + wall.wide;    
+
+        while(x < wall.rightX - brickSize) {            
+            ctx.drawImage(bricks[i], x + offset, y, brickSize, brickSize);
+            x = x + brickSize;
+        }
+    y = y + brickSize;
+    i++;
+    }
 }
 
 
