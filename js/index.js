@@ -24,7 +24,6 @@ var ctx = canvas.getContext("2d");
 var score = 0;
 var speed = 10;
 
-
 canvas.width  = window.innerWidth; //set canvas width to device's screen width
 canvas.height = window.innerHeight; //set canvas height to device's screen height
 
@@ -106,7 +105,7 @@ var ball = {
     }
 };
 
-//iOS = true;
+iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 50;
