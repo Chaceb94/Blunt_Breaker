@@ -191,7 +191,6 @@ function drawCourt() {
 
     while(y < (brickSize * 4) + wall.topY + wall.high) {
         var x = wall.leftX + wall.wide;    
-        console.log(i);
         while(x < wall.rightX - brickSize) {            
             ctx.drawImage(bricks[i], x + offset, y, brickSize, brickSize);
             x = x + brickSize;

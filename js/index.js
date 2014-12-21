@@ -29,19 +29,19 @@ canvas.height = window.innerHeight; //set canvas height to device's screen heigh
 
 bricks = [];
 brick = new Image();
-brick.src = "res/sprites/pot_leaf_red-128.png";
+brick.src = "img/sprites/pot_leaf_red-128.png";
 bricks.push(brick);
 
 brick = new Image();
-brick.src = "res/sprites/pot_leaf_green-128.png";
+brick.src = "img/sprites/pot_leaf_green-128.png";
 bricks.push(brick);
 
 brick = new Image();
-brick.src = "res/sprites/pot_leaf_yellow-128.png";
+brick.src = "img/sprites/pot_leaf_yellow-128.png";
 bricks.push(brick);
 
 joint = new Image();
-joint.src = "res/sprites/joint.png";
+joint.src = "img/sprites/joint.png";
 
 
 var wall = {
@@ -105,7 +105,7 @@ var ball = {
     }
 };
 
-//iOS = true;
+iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 50;
