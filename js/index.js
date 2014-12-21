@@ -130,8 +130,8 @@ function initialize() {
         drawCourt();
         ctx.fillStyle = 'white';
         ctx.fillText('Touch to Begin', 100, 400);
-        $("canvas").on("touchdown mousedown", function(){
-            $("canvas").off("touchdown mousedown");
+        $("canvas").on("touchdown", function(){
+            $("canvas").off("touchdown");
             interval = setInterval(function () {ball.move()}, speed);
             $("canvas").on("touchmove", function(ev){
                 var e = ev.originalEvent;
