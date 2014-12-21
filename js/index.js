@@ -105,7 +105,7 @@ var ball = {
     }
 };
 
-iOS = true;
+//iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 50;
@@ -154,7 +154,7 @@ function initialize() {
 
 function drawCourt() {
     //clear the screen before drawing more
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = canvas.width;
     //draw walls
     ctx.fillStyle = "#AA00FF"; //set color purple to initialize walls
     ctx.fillRect(wall.leftX, wall.leftY, wall.wide, canvas.height); //draw left wall
@@ -170,7 +170,7 @@ function drawCourt() {
     ctx.fillRect(ball.x, ball.y, ball.size, ball.size); //draw the ball's initial position
 
 
-    ctx.drawImage(joint, paddle.x, paddle.y, paddle.wide, paddle.high); //draw the paddle's initial position
+    ctx.drawImage(joint, paddle.x, paddle.y, '5em', paddle.high); //draw the paddle's initial position
 
     //draw textbox to show score
     ctx.fillStyle = "black";
