@@ -24,24 +24,25 @@ var ctx = canvas.getContext("2d");
 var score = 0;
 var speed = 10;
 
+
 canvas.width  = window.innerWidth; //set canvas width to device's screen width
 canvas.height = window.innerHeight; //set canvas height to device's screen height
 
 bricks = [];
 brick = new Image();
-brick.src = "img/sprites/pot_leaf_red-128.png";
+brick.src = "img/pot_leaf_red-128.png";
 bricks.push(brick);
 
 brick = new Image();
-brick.src = "img/sprites/pot_leaf_green-128.png";
+brick.src = "img/pot_leaf_green-128.png";
 bricks.push(brick);
 
 brick = new Image();
-brick.src = "img/sprites/pot_leaf_yellow-128.png";
+brick.src = "img/pot_leaf_yellow-128.png";
 bricks.push(brick);
 
 joint = new Image();
-joint.src = "img/sprites/joint.png";
+joint.src = "img/joint.png";
 
 
 var wall = {
@@ -105,7 +106,7 @@ var ball = {
     }
 };
 
-iOS = true;
+//iOS = true;
 if(iOS) {        
     wall.wide = 2;
     wall.high = 50;
