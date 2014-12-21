@@ -23,9 +23,14 @@ var canvas = document.getElementById("pongCourt");
 var ctx = canvas.getContext("2d");
 var score = 0;
 var speed = 10;
+var pixelRatio = window.devicePixelRatio;
 
-canvas.width  = window.innerWidth; //set canvas width to device's screen width
-canvas.height = window.innerHeight; //set canvas height to device's screen height
+canvas.width  = window.innerWidth * pixelRatio; //set canvas width to device's screen width
+canvas.height = window.innerHeight * pixelRatio; //set canvas height to device's screen height
+
+canvas.style.width = window.innerWidth + 'px';   /// CSS size of canvas
+canvas.style.height = window.innerHeight + 'px';
+
 var rasta_gradient = ctx.createLinearGradient(0,0,0,canvas.height);
 rasta_gradient.addColorStop(0,"green");
 rasta_gradient.addColorStop(0.5,"yellow");
@@ -62,8 +67,8 @@ var wall = {
 };     
     
 paddle = {    
-    wide: 70,
-    high: 16,
+    wide: 200,
+    high: 50,
     x: canvas.width/2,
     y: canvas.height * 4 / 5
 };
@@ -71,7 +76,7 @@ paddle = {
 var ball = {
     xMove: 1,
     yMove: 1,
-    size: 10,
+    size: 25,
     x: canvas.width/2,
     y: canvas.height/2,
     
@@ -126,7 +131,7 @@ if(iOS) {
 
     ball.xMove = 2;
     ball.yMove = 2;
-    ball.size = 10;
+    ball.size = 25;
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;  
     
@@ -185,7 +190,7 @@ function drawCourt() {
     
         
 
-    var brickSize = 40;
+    var brickSize = 70;
     var inset = ((canvas.width - (canvas.width - wall.rightX)) - (wall.leftX + wall.wide));
     var bricksNum = parseInt(inset/brickSize);
     var bricksWidth = brickSize * bricksNum;
